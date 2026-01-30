@@ -58,13 +58,13 @@ def solve_puzzle(game_state: dict) -> None:
             game_state['player_inventory'].append('key_from_secret_room')
             player_actions.show_inventory(game_state)
         elif current_room == 'trap_room':
-            print("Плиты перестали двигаться. Вы можете безопасно перемещаться. В комнате появилась бронзовая шкатулка.")
+            print("Плиты перестали двигаться. Вы можете безопасно перемещаться. В комнате появилась 'bronze_box'.")
             room_data['items'].append('bronze_box')
         elif current_room == 'library':
-            print("На полке появилась древняя книга, содержащая в себе важную информацию!")
+            print("На полке появилась 'ancient_book', содержащая в себе важную информацию!")
             room_data['items'].append('ancient_book')
         elif current_room == 'secret_room':
-            print("На полке появилась карта!")
+            print("На полке появилась 'old_map'!")
             room_data['items'].append('old_map')
         
         # Убираем загадку
@@ -86,7 +86,7 @@ def attempt_open_treasure(game_state: dict) -> None:
     print("\nПеред вами большой сундук с сокровищами.")
     
     # Проверяем наличие ключа
-    if 'rusty_key_from_treasure_room' in game_state['player_inventory']:
+    if 'rusty_key' in game_state['player_inventory']:
         print("\nВы применяете ключ, и замок щёлкает. Сундук открыт!")
         
         # Удаляем сундук из комнаты
@@ -129,7 +129,7 @@ def attempt_open_treasure(game_state: dict) -> None:
         else:
             print("\nКод уже был использован или отсутствует.")
     else:
-        print("\nВы отступаете от сундука.")
+        print("\nВы отходите от сундука.")
 
 def attempt_open_secret_room(game_state: dict) -> bool:
     # Попытка открыть секретную комнату

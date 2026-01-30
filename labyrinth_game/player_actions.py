@@ -80,7 +80,7 @@ def use_item(game_state: dict, item_name: str) -> None:
         print("\nВы открыли бронзовую шкатулку!")
         if 'rusty_key' not in inventory:
             inventory.append('rusty_key')
-            print("Внутри вы нашли старый ржавый ключ!")
+            print("Внутри вы нашли старый 'rusty_key'!")
         else:
             print("Шкатулка оказалась пуста.")
         
