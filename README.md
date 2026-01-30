@@ -10,3 +10,6 @@ make install
 
 # Или напрямую
 poetry install
+
+## Запуск
+make project
