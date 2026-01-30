@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "project1_ivanov_ivan_p12345"
+name = "labyrinth_game"
 version = "0.1.0"
 description = "Текстовая adventure игра 'Лабиринт сокровищ'"
-authors = ["Иван Иванов <ivanov@example.com>"]
+authors = ["Zasorin E.S. <bboy.ftozo@gmail.com>"]
 readme = "README.md"
 license = "MIT"
 
