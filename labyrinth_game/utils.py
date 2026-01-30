@@ -141,7 +141,7 @@ def attempt_open_secret_room(game_state: dict) -> bool:
         print("\nВы применяете ключ, и замок щёлкает. Дверь открыта!")
         return True
     else:
-        print("Дверь заперта, нужен ключ, чтобы ее открыть.")
+        print("\nДверь заперта, нужен ключ, чтобы ее открыть.")
         return False
 
 
