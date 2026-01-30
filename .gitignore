@@ -3,3 +3,8 @@ poetry.lock
 
 # Build
 dist/
+
+# Временные файлы
+.venv/
+.ruff_cache/
+labyrinth_game/__pycache__

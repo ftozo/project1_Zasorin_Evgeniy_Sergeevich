@@ -27,20 +27,29 @@ def move_player(game_state: dict, direction: str) -> None:
     current_room = game_state['current_room']
     room_data = constants.ROOMS[current_room]
     
-    if ((direction in room_data['exits'] and current_room != 'secret_passage') or (current_room == 'secret_passage' and direction == 'south')):
+    if direction in room_data['exits']:
         new_room = room_data['exits'][direction]
+        if new_room == 'treasure_room':
+            if 'key_from_treasure_room' in game_state['player_inventory']:
+                print("\nВы используете ключ, чтобы открыть дверь в сокровищницу.")
+                game_state['player_inventory'].remove('key_from_treasure_room')
+                print("Ключ сломался в замке, но дверь открылась.")
+            else:
+                print("\nДверь в сокровищницу заперта. Нужен ключ, чтобы пройти дальше.")
+                return
+            
+        elif new_room == 'secret_room':
+            if 'key_from_secret_room' in game_state['player_inventory']:
+                print("\nВы применяете ключ, и замок щёлкает. Дверь открыта!")
+            else:
+                print("\nДверь заперта, нужен ключ, чтобы ее открыть.")
+                return
+            
         game_state['current_room'] = new_room
         game_state['steps_taken'] += 1
         print(f"\nВы переместились {direction} в {new_room}.")
+        utils.random_event(game_state)
         utils.describe_current_room(game_state)
-    elif current_room == 'secret_passage' and direction == 'north':
-        result = utils.attempt_open_secret_room(game_state)
-        if result == True:
-            new_room = room_data['exits'][direction]
-            game_state['current_room'] = new_room
-            game_state['steps_taken'] += 1
-            print(f"\nВы переместились {direction} в {new_room}.")
-            utils.describe_current_room(game_state)
     else:
         print(f"\nНельзя пойти в направлении '{direction}'.")
 
