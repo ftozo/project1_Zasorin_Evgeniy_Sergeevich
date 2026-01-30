@@ -35,7 +35,7 @@ def move_player(game_state: dict, direction: str) -> None:
         utils.describe_current_room(game_state)
     elif current_room == 'secret_passage' and direction == 'north':
         result = utils.attempt_open_secret_room(game_state)
-        if result:
+        if result == True:
             new_room = room_data['exits'][direction]
             game_state['current_room'] = new_room
             game_state['steps_taken'] += 1
