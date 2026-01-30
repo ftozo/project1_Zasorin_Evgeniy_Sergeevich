@@ -27,7 +27,7 @@ def move_player(game_state: dict, direction: str) -> None:
     current_room = game_state['current_room']
     room_data = constants.ROOMS[current_room]
     
-    if (direction in room_data['exits'] or (current_room == 'secret_passage' and direction == 'south')):
+    if ((direction in room_data['exits'] and current_room != 'secret_passage') or (current_room == 'secret_passage' and direction == 'south')):
         new_room = room_data['exits'][direction]
         game_state['current_room'] = new_room
         game_state['steps_taken'] += 1
