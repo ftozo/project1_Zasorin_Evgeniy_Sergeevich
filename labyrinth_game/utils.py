@@ -54,17 +54,18 @@ def solve_puzzle(game_state: dict) -> None:
         
         # Награда за решение загадки
         if current_room == 'hall':
-            print("Сундук на пьедестале открылся! Вы нашли 'treasure_room_key'!")
-            game_state['player_inventory'].append('treasure_room_key')
+            print("Сундук на пьедестале открылся! Вы нашли 'key_from_secret_room'!")
+            game_state['player_inventory'].append('key_from_secret_room')
             player_actions.show_inventory(game_state)
         elif current_room == 'trap_room':
-            print("Плиты перестали двигаться. Вы можете безопасно перемещаться.")
-            # Добавляем новый выход
-            room_data['exits']['south'] = 'secret_passage'
-            constants.ROOMS['secret_passage']['exits']['north'] = 'trap_room'
+            print("Плиты перестали двигаться. Вы можете безопасно перемещаться. В комнате появилась бронзовая шкатулка.")
+            room_data['items'].append('bronze_box')
         elif current_room == 'library':
-            print("На полке появился новый свиток с картой!")
-            room_data['items'].append('treasure_map')
+            print("На полке появилась древняя книга, содержащая в себе важную информацию!")
+            room_data['items'].append('ancient_book')
+        elif current_room == 'secret_room':
+            print("На полке появилась карта!")
+            room_data['items'].append('old_map')
         
         # Убираем загадку
         room_data['puzzle'] = None
@@ -130,62 +131,18 @@ def attempt_open_treasure(game_state: dict) -> None:
     else:
         print("\nВы отступаете от сундука.")
 
-def attempt_open_secret_room(game_state: dict) -> None:
+def attempt_open_secret_room(game_state: dict) -> bool:
     # Попытка открыть секретную комнату
     current_room = game_state['current_room']
     room_data = constants.ROOMS[current_room]
     
-    if 'treasure_chest' not in room_data['items']:
-        print("\nЗдесь нет сундука с сокровищами.")
-        return
-    
-    print("\nПеред вами большой сундук с сокровищами.")
-    
     # Проверяем наличие ключа
-    if 'rusty_key_from_treasure_room' in game_state['player_inventory']:
-        print("\nВы применяете ключ, и замок щёлкает. Сундук открыт!")
-        
-        # Удаляем сундук из комнаты
-        room_data['items'].remove('treasure_chest')
-        
-        print("\nВ сундуке сокровище! Вы победили!")
-        print("=" * 50)
-        print("ПОЗДРАВЛЯЕМ! Вы нашли сокровища лабиринта!")
-        print(f"Всего шагов: {game_state['steps_taken']}")
-        print(f"Собрано предметов: {len(game_state['player_inventory'])}")
-        print("=" * 50)
-        
-        game_state['game_over'] = True
-        return
-    
-    # Если ключа нет, предлагаем ввести код
-    print("Сундук заперт. У вас нет ключа, но можно попробовать ввести код.")
-    
-    response = player_actions.get_input("Попробовать ввести код? (да/нет): ")
-    
-    if response in ['да', 'yes', 'y']:
-        # Используем загадку из комнаты как код
-        if room_data['puzzle']:
-            _, correct_code = room_data['puzzle']
-            code_attempt = player_actions.get_input("Введите код: ")
-            
-            if code_attempt == correct_code:
-                print("\nКод верный! Сундук открывается!")
-                room_data['items'].remove('treasure_chest')
-                
-                print("\nВы нашли сокровища! Победа!")
-                print("=" * 50)
-                print("Вы взломали замок и добыли сокровища!")
-                print(f"Всего шагов: {game_state['steps_taken']}")
-                print("=" * 50)
-                
-                game_state['game_over'] = True
-            else:
-                print("\nНеверный код. Сундук не открылся.")
-        else:
-            print("\nКод уже был использован или отсутствует.")
+    if 'key_from_secret_room' in game_state['player_inventory']:
+        print("\nВы применяете ключ, и замок щёлкает. Дверь открыта!")
+        return True
     else:
-        print("\nВы отступаете от сундука.")
+        print("Дверь заперта, нужен ключ, чтобы ее открыть.")
+        return False
 
 
 def show_help() -> None:

@@ -27,12 +27,20 @@ def move_player(game_state: dict, direction: str) -> None:
     current_room = game_state['current_room']
     room_data = constants.ROOMS[current_room]
     
-    if direction in room_data['exits']:
+    if (direction in room_data['exits'] and current_room != 'secret_passage'):
         new_room = room_data['exits'][direction]
         game_state['current_room'] = new_room
         game_state['steps_taken'] += 1
         print(f"\nВы переместились {direction} в {new_room}.")
         utils.describe_current_room(game_state)
+    elif current_room == 'secret_passage' and direction == 'north':
+        result = utils.attempt_open_secret_room(game_state)
+        if result:
+            new_room = room_data['exits'][direction]
+            game_state['current_room'] = new_room
+            game_state['steps_taken'] += 1
+            print(f"\nВы переместились {direction} в {new_room}.")
+            utils.describe_current_room(game_state)
     else:
         print(f"\nНельзя пойти в направлении '{direction}'.")
 
@@ -70,21 +78,21 @@ def use_item(game_state: dict, item_name: str) -> None:
         
     elif item_name == 'bronze_box':
         print("\nВы открыли бронзовую шкатулку!")
-        if 'rusty_key_from_treasure_room' not in inventory:
-            inventory.append('rusty_key_from_treasure_room')
+        if 'rusty_key' not in inventory:
+            inventory.append('rusty_key')
             print("Внутри вы нашли старый ржавый ключ!")
         else:
             print("Шкатулка оказалась пуста.")
         
     elif item_name == 'ancient_book':
         print("\nВы прочитали древнюю книгу. Вы узнали секрет: "
-              "ключ от сокровищницы называется 'treasure_room_key'!")
+              "ключ от сундука с сокровищем называется 'rusty_key'!")
         
     elif item_name == 'old_map':
         print("\nНа карте отмечены все комнаты лабиринта. "
               "Теперь вы лучше ориентируетесь!")
         
-    elif item_name == 'rusty_key_from_treasure_room':
+    elif item_name == 'rusty_key':
         print("\nРжавый ключ холодный на ощупь. "
               "Возможно, он откроет что-то важное.")
         
